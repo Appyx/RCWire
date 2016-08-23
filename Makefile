@@ -3,5 +3,5 @@ CXXFLAGS=-DRPI
 
 all: send
 	
-send: Header.o RCSwitch.o WirelessWire.o RaspberryExample.o
+send: Header.o RCSwitch.o RCWire.o RaspberryExample.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $+ -o $@ -lwiringPi
