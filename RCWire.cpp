@@ -106,7 +106,8 @@ void RCWire::sendMessage(const char *text) {
             }
         }
 
-        /*rcSwitch.send(message, frameSize);
+        rcSwitch.send(message, frameSize);
+        /*
         print("message sent: ");
         printArray(message, frameSize);
         println();

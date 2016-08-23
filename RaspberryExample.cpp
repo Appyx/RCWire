@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
                   << " but actual size = " << buf.str().size() << std::endl;
         exit(1);
     }
-
+    std::cout << "sending message..." << std::endl;
     wire.sendMessage(buf.str().c_str());
 }
 
