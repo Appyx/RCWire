@@ -112,26 +112,26 @@ int Header::binaryToInt(int bit0, int bit1) {
 }
 
 void Header::print() {
-    RCSwitch::println("----------");
-    RCSwitch::print("ack: ");
-    RCSwitch::print(array[0]);
-    RCSwitch::println();
-    RCSwitch::print("sync: ");
-    RCSwitch::print(array[1]);
-    RCSwitch::println();
-    RCSwitch::print("subpackage: ");
-    RCSwitch::print(array[2]);
-    RCSwitch::print(array[3]);
-    RCSwitch::println();
-    RCSwitch::print("packages: ");
-    RCSwitch::print(array[4]);
-    RCSwitch::print(array[5]);
-    RCSwitch::println();
-    RCSwitch::print("port: ");
-    RCSwitch::print(array[6]);
-    RCSwitch::print(array[7]);
-    RCSwitch::println();
-    RCSwitch::println("----------");
+    RCWire::println("----------");
+    RCWire::print("ack: ");
+    RCWire::print(array[0]);
+    RCWire::println();
+    RCWire::print("sync: ");
+    RCWire::print(array[1]);
+    RCWire::println();
+    RCWire::print("subpackage: ");
+    RCWire::print(array[2]);
+    RCWire::print(array[3]);
+    RCWire::println();
+    RCWire::print("packages: ");
+    RCWire::print(array[4]);
+    RCWire::print(array[5]);
+    RCWire::println();
+    RCWire::print("port: ");
+    RCWire::print(array[6]);
+    RCWire::print(array[7]);
+    RCWire::println();
+    RCWire::println("----------");
 
 }
 
