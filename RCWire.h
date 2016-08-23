@@ -82,7 +82,7 @@ private:
 
     RCSwitch rcSwitch;
 
-    static void (*singlePortHandler)(void);
+    static void (*singlePortHandler)(const char *);
 
     void encodeMessage(unsigned char *result, const char *msg);
 

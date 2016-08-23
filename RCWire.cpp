@@ -35,7 +35,7 @@
 
 RCWire *RCWire::instance;
 
-void (*RCWire::singlePortHandler)(void);
+void (*RCWire::singlePortHandler)(const char *);
 
 /**
  * Creates the wire
