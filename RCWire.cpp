@@ -151,7 +151,7 @@ void RCWire::onRcMessage(unsigned char *code, int protocol) {
     }
 
     if (header.getSubPackage() == header.getPackages()) {
-        instance->singlePortHandler(message);
+        instance->singlePortHandler(instance->buffer);
 
 //        print("message is: ");
 //        println(instance->buffer);
