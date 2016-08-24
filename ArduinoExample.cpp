@@ -27,9 +27,9 @@
  */
 
 #include "Arduino.h"
-#include "WirelessWire.h"
+#include "RCWire.h"
 
-WirelessWire wire = WirelessWire(0, 12);
+RCWire wire = RCWire(0, 12);
 
 void handleMessage(const char *message);
 

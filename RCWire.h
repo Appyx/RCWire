@@ -37,14 +37,33 @@
 class RCWire {
 
 public:
+    /**
+    * Creates the wire
+    * @param rxPin Receive pin (it's not the pin number on the board - it's the interrupt number)
+    * @param txPin Transmit pin (pin on the board)
+    * @return
+    */
     RCWire(unsigned int rxPin, unsigned int txPin);
 
+    /**
+    * Plugs the wire in and only listens and sends on the specified port
+    * @param port 0-3
+    * @param listener Any function
+    */
     void plugIn(unsigned int port, void (*listener)(const char *message));
 
+    /**
+    * Sends a string with a maximum length of 59 chars.
+    * @param text The text to send
+    */
     void sendMessage(const char *text);
 
     int getMaxMessageSize();
 
+    /**
+    * Changes the RC protocol.
+    * @param protocol A number which can be looked up in the RCSwitch.cpp file.
+    */
     void changeProtocol(int protocol);
 
     static void onRcMessage(unsigned char *code, int protocol);

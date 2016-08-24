@@ -37,12 +37,7 @@ RCWire *RCWire::instance;
 
 void (*RCWire::singlePortHandler)(const char *);
 
-/**
- * Creates the wire
- * @param rxPin Receive pin (it's not the pin number on the board - it's the interrupt number)
- * @param txPin Transmit pin (pin on the board)
- * @return
- */
+
 RCWire::RCWire(unsigned int rxPin, unsigned int txPin) {
     RCWire::instance = this;
     nextSubPackageNumber = 0;
@@ -54,11 +49,6 @@ RCWire::RCWire(unsigned int rxPin, unsigned int txPin) {
 }
 
 
-/**
- * Plugs the wire in and only listens and sends on the specified port
- * @param port 0-3
- * @param listener Any function
- */
 void RCWire::plugIn(unsigned int port, void (*listener)(const char *message)) {
     singlePortHandler = listener;
     this->port = port;  //TODO: handle ports
@@ -68,18 +58,12 @@ int RCWire::getMaxMessageSize() {
     return (4 * (frameSize - 8) / 8) - 1;
 }
 
-/**
- * Changes the RC protocol.
- * @param protocol A number which can be looked up in the RCSwitch.cpp file.
- */
+
 void RCWire::changeProtocol(int protocol) {
     rcSwitch.setProtocol(protocol);
 }
 
-/**
- * Sends a string with a maximum length of 59 chars.
- * @param text The text to send
- */
+
 void RCWire::sendMessage(const char *text) {
 
     int characters = strlen(text);
