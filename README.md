@@ -5,6 +5,11 @@ communication between Arduino and RaspberryPi.
 You can also use it for two Arduinos or two RaspberryPis.
 (For the RaspberryPi version look at the Known Issues section.)
 
+The plan is to create a network of Arduinos in my home, which are controlling several devices.  
+The RaspberryPi should be the "Control Center" which sends the messages.
+
+I think this is the cheapest solution for creating a wireless network of ICs.
+
 ## How to use?
 ```
 //create an object
@@ -12,6 +17,9 @@ WirelessWire wire = WirelessWire(0, 12);
 
 //plug in the wire
 wire.plugIn(0, handleMessage);
+
+//send a message
+wire.sendMessage("this is a really long message i think");
 
 //do something in your callback function
 void handleMessage(const char *message) {
@@ -27,7 +35,7 @@ There are many tutorial out there for wiring up the boards.
 Just copy the files RCWire,RCSwitch,Header into the appropriate library folder.  
 For the Arduino IDE check this link: <a>https://www.arduino.cc/en/Guide/Libraries#toc5</a>  
 For PlatformIO just copy the files into the lib folder.  
-Take a look at the ArduioExample.cpp.
+Take a look at the ArduinoExample.cpp.
 
 
 ## Installation-RaspberryPi
@@ -50,6 +58,8 @@ the header has to be bigger. And I think you won't be able to send more without 
 one area without disturbing each other.
 
 * Coming maybe: Dynamic protocol switching.
+
+* Coming maybe: A signal repeater function. (Use an Arduino to overcome greater distances)
 
 # Known Issues
 
