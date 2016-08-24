@@ -26,10 +26,11 @@ void handleMessage(const char *message) {
     RCWire::println(message); //useful method for cross - platform printing
 }
 ```
-Note for Arduino: the receiver pin is not the pin on the board, it's the interrupt numebr.
+Note for Arduino: the receiver pin is not the pin on the board, it's the interrupt number.
+Note for RaspberryPi: take a look at the WiringPi pin mappings.
 
 ## Installation-Hardware
-There are many tutorial out there for wiring up the boards.
+There are many tutorials out there for wiring up the boards.
 
 ## Installation-Arduino
 Just copy the files RCWire,RCSwitch,Header into the appropriate library folder.  
