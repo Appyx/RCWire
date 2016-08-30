@@ -81,6 +81,9 @@ public:
     static void printArray(unsigned char *array, int size);
 
     static const int frameSize = 128;
+
+    static bool stringEquals(const char *s1, const char *s2);
+
 private:
 
     int nextSubPackageNumber;
@@ -107,7 +110,7 @@ private:
 
     void decodeMessage(char *result, unsigned char *msg);
 
-    static bool stringEquals(const char *s1, const char *s2);
+
 };
 
 
