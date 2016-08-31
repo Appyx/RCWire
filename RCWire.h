@@ -47,10 +47,10 @@ public:
 
     /**
     * Plugs the wire in and only listens and sends on the specified port
-    * @param port 0-3
+    * @param port 0-7
     * @param listener Any function
     */
-    void plugIn(unsigned int port, void (*listener)(const char *message));
+    void plugIn(int port, void (*listener)(const char *message));
 
     /**
     * Sends a string with a maximum length of 59 chars.
@@ -90,17 +90,17 @@ private:
 
     int port;
 
+    bool sync;
+
+    Header lastHeader;
+
     char buffer[(frameSize - 8) / 8 * 4];
-
-//    static bool checkForAck(unsigned char *code);
-
-//    void sendAck(Header h);
 
     static RCWire *instance;
 
     char lastMessage[(frameSize - 8) / 8];
 
-    void storeLastMessage(char *message);
+    void storeLastMessage(const char *message);
 
     RCSwitch rcSwitch;
 
@@ -110,7 +110,7 @@ private:
 
     void decodeMessage(char *result, unsigned char *msg);
 
-
+    void storeLastHeader(Header header);
 };
 
 

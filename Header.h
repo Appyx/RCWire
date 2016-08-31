@@ -33,9 +33,12 @@
 class Header {
 
 public:
+
     Header();
 
     Header(unsigned char *header);
+
+    Header(int init);
 
     int getSubPackage();
 
@@ -45,26 +48,24 @@ public:
 
     void setPort(int port);
 
-    void setSync(int value);
+    void setSync(bool flag);
 
     void setPackages(int number);
 
     int getPackages();
 
-    int getSync();
-
-    void setAck();
-
-    bool isAck();
-
     void print();
 
     unsigned char *getArray();
+
+    bool equals(Header header);
 
 private:
     unsigned char array[8];
 
     int intToBinary(int number, int bit);
+
+    int binaryToInt(int bit0, int bit1, int bit2);
 
     int binaryToInt(int bit0, int bit1);
 

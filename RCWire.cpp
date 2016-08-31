@@ -39,19 +39,19 @@ void (*RCWire::singlePortHandler)(const char *);
 
 
 RCWire::RCWire(unsigned int rxPin, unsigned int txPin) {
-    RCWire::instance = this;
+    lastHeader = Header(1);
+    sync = false;
     nextSubPackageNumber = 0;
-
+    RCWire::instance = this;
     rcSwitch = RCSwitch();
     rcSwitch.enableTransmit(txPin);
     rcSwitch.enableReceive(rxPin);
-
 }
 
 
-void RCWire::plugIn(unsigned int port, void (*listener)(const char *message)) {
+void RCWire::plugIn(int port, void (*listener)(const char *message)) {
     singlePortHandler = listener;
-    this->port = port;  //TODO: handle ports
+    this->port = port;
 }
 
 int RCWire::getMaxMessageSize() {
@@ -69,7 +69,8 @@ void RCWire::sendMessage(const char *text) {
     int characters = strlen(text);
     int fittingChars = (frameSize - 8) / 8;
 
-    Header h = Header();
+    Header h = Header(0);
+    h.setSync(sync);
     h.setPort(port);
     h.setPackages(characters / fittingChars);
 
@@ -91,18 +92,11 @@ void RCWire::sendMessage(const char *text) {
         }
 
         rcSwitch.send(message, frameSize);
-        /*
-        print("message sent: ");
-        printArray(message, frameSize);
-        println();
-
-        char debug[(frameSize - 8) / 8];
-        decodeMessage(debug, message);
-        print(debug);
-        println();*/
-
         text = text + fittingChars;
     }
+
+    sync = !sync;
+
 }
 
 /**
@@ -112,7 +106,9 @@ void RCWire::sendMessage(const char *text) {
  */
 void RCWire::onRcMessage(unsigned char *code, int protocol) {
     Header header = Header(code);
-
+    if (header.getPort() != instance->port) {
+        return;
+    }
     if (!instance->nextSubPackageNumber == header.getSubPackage()) {
         return;
     }
@@ -125,10 +121,11 @@ void RCWire::onRcMessage(unsigned char *code, int protocol) {
     char message[(frameSize - 8) / 8];
     instance->decodeMessage(message, code);
 
-    if (stringEquals(instance->lastMessage, message)) {
+    if (stringEquals(instance->lastMessage, message) && instance->lastHeader.equals(header)) {
         return;
     }
     instance->storeLastMessage(message);
+    instance->storeLastHeader(header);
 
     for (int i = 0; i < (frameSize - 8) / 8; i++) {
         instance->buffer[i + header.getSubPackage() * (frameSize - 8) / 8] = message[i];
@@ -136,16 +133,11 @@ void RCWire::onRcMessage(unsigned char *code, int protocol) {
 
     if (header.getSubPackage() == header.getPackages()) {
         instance->singlePortHandler(instance->buffer);
-
-//        print("message is: ");
-//        println(instance->buffer);
-//        RCWire::singlePortHandler();
+        instance->storeLastHeader(header);
     }
 }
 
-void
-RCWire::encodeMessage(unsigned char *result, const char *msg) {
-    int breakIndex = frameSize - 8;
+void RCWire::encodeMessage(unsigned char *result, const char *msg) {
     for (int i = 0; i < frameSize - 8; i += 8) {
         char c = msg[i / 8];
 
@@ -171,38 +163,11 @@ void RCWire::decodeMessage(char *result, unsigned char *msg) {
     }
 }
 
-void RCWire::storeLastMessage(char *message) {
+void RCWire::storeLastMessage(const char *message) {
     for (int i = 0; i < (frameSize - 8) / 8; i++) {
         lastMessage[i] = message[i];
     }
 }
-
-//TODO: ACK handling
-/*void RCWire::sendAck(Header h) {
-    h.setAck();
-    unsigned char message[frameSize];
-    for (int i = 0; i < frameSize; i++) {
-        if (i >= 8) {
-            message[i] = 1;
-        } else {
-            message[i] = 0;
-        }
-    }
-    rcSwitch.send(message, frameSize);
-    print("ack sent: ");
-    printArray(message, frameSize);
-    println();
-}
-
-bool RCWire::checkForAck(unsigned char *code) {
-
-    int check = 0;
-    for (int i = 8; i < frameSize; i++) {
-        check += code[i];
-    }
-    println();
-    return check > frameSize - 10;
-}*/
 
 
 bool RCWire::stringEquals(const char *s1, const char *s2) {
@@ -263,6 +228,10 @@ void RCWire::printArray(unsigned char *array, int size) {
         print(array[i]);
     }
 
+}
+
+void RCWire::storeLastHeader(Header header) {
+    lastHeader = Header(header.getArray());
 }
 
 

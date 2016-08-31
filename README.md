@@ -15,7 +15,7 @@ I think this is the cheapest solution for creating a wireless network of ICs.
 RCWire wire = RCWire(0, 12); 
 
 //plug in the wire
-wire.plugIn(0, handleMessage); //The port actually does nothing
+wire.plugIn(0, handleMessage); //The port has to be the same for sender and receiver
 
 //send a message
 wire.sendMessage("this is a really long message i think");
@@ -46,7 +46,8 @@ Take a look at the ArduinoExample.cpp.
 First you have to install the well known library WiringPI <a>http://wiringpi.com/download-and-install/</a>  
 Then just clone the git repo and run the make command.  
 Now you should have a send application which takes the text to be sent as parameter.  
-(This application will only work with the ArduinoExample.cpp counterpart.)
+(This application will only work with the ArduinoExample.cpp counterpart. 
+Note that you have to change the message after it was sent once if your sender doesn't run in an infinite loop.)
 
 ## Features
 * You can send text with a maximum length of 59 characters in the default setup.  
@@ -55,10 +56,7 @@ the header has to be bigger. And I think you won't be able to send more without 
 
 * You can change the transmission-protocol (thanks to RCSwitch).
 
-* Coming soon: ACK-flag will be sent after successful message. --> Retransmission   
-(This will probably only work with two Arduinos because of the ISRs on the RaspberryPi) 
-
-* Coming soon: Specify a "port", so that it's possible to have multiple RCWires in
+* Specify a "port", so that it's possible to have multiple RCWires in
 one area without disturbing each other.
 
 * Coming maybe: A signal repeater function. (Use an Arduino to overcome greater distances)

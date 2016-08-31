@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     wiringPiSetup();
 #endif
     RCWire wire = RCWire(2, 0);
-    wire.plugIn(0, onMessage); //same port as on Raspberry
+    wire.plugIn(0, onMessage); //same port as on ArduinoExample
 
     std::ostringstream buf;
 

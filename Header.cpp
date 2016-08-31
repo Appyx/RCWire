@@ -29,15 +29,14 @@
 #include "Header.h"
 #include "RCWire.h"
 
-//bit 0 = ack
-//bit 1 = sync
-//bit 2+3 = subpackage number
-//bit 4+5 = packages
-//bit 6+7 = port number
+//bit 0 = sync
+//bit 1+2 = subpackage number
+//bit 3+4 = packages
+//bit 5+6+7 = port number
 
-Header::Header() {
+Header::Header(int init) {
     for (int i = 0; i < 8; i++) {
-        array[i] = 0;
+        array[i] = (unsigned char) init;
     }
 }
 
@@ -48,57 +47,47 @@ Header::Header(unsigned char *header) {
 }
 
 void Header::setPort(int port) {
-    if (port > 3) {
+    if (port > 7) {
         return;
     }
+    array[5] = (unsigned char) intToBinary(port, 2);
     array[6] = (unsigned char) intToBinary(port, 1);
     array[7] = (unsigned char) intToBinary(port, 0);
 
 }
 
+void Header::setSync(bool flag) {
+    array[0] = (unsigned char) flag;
+}
+
 int Header::getPort() {
-    return binaryToInt(array[7], array[6]);
-}
-
-void Header::setSync(int value) {
-    array[1] = (unsigned char) value;
-}
-
-int Header::getSync() {
-    return array[1];
-}
-
-void Header::setAck() {
-    array[0] = 1;
+    return binaryToInt(array[7], array[6], array[5]);
 }
 
 void Header::setSubPackage(int number) {
     if (number > 3) {
         return;
     }
-    array[2] = (unsigned char) intToBinary(number, 1);
-    array[3] = (unsigned char) intToBinary(number, 0);
+    array[1] = (unsigned char) intToBinary(number, 1);
+    array[2] = (unsigned char) intToBinary(number, 0);
 }
 
 int Header::getSubPackage() {
-    return binaryToInt(array[3], array[2]);
+    return binaryToInt(array[2], array[1]);
 }
 
 void Header::setPackages(int number) {
     if (number > 3) {
         return;
     }
-    array[4] = (unsigned char) intToBinary(number, 1);
-    array[5] = (unsigned char) intToBinary(number, 0);
+    array[3] = (unsigned char) intToBinary(number, 1);
+    array[4] = (unsigned char) intToBinary(number, 0);
 }
 
 int Header::getPackages() {
-    return binaryToInt(array[5], array[4]);
+    return binaryToInt(array[4], array[3]);
 }
 
-bool Header::isAck() {
-    return array[0] == 1;
-}
 
 int Header::intToBinary(int number, int bit) {
     return (number >> bit) & 1;
@@ -111,23 +100,29 @@ int Header::binaryToInt(int bit0, int bit1) {
     return number;
 }
 
+int Header::binaryToInt(int bit0, int bit1, int bit2) {
+    int number = 0;
+    number |= bit0 == 1 ? 0x01 : 0x00;
+    number |= bit1 == 1 ? 0x02 : 0x00;
+    number |= bit2 == 1 ? 0x04 : 0x00;
+    return number;
+}
+
 void Header::print() {
     RCWire::println("----------");
-    RCWire::print("ack: ");
+    RCWire::print("sync: ");
     RCWire::print(array[0]);
     RCWire::println();
-    RCWire::print("sync: ");
-    RCWire::print(array[1]);
-    RCWire::println();
     RCWire::print("subpackage: ");
+    RCWire::print(array[1]);
     RCWire::print(array[2]);
-    RCWire::print(array[3]);
     RCWire::println();
     RCWire::print("packages: ");
+    RCWire::print(array[3]);
     RCWire::print(array[4]);
-    RCWire::print(array[5]);
     RCWire::println();
     RCWire::print("port: ");
+    RCWire::print(array[5]);
     RCWire::print(array[6]);
     RCWire::print(array[7]);
     RCWire::println();
@@ -137,6 +132,19 @@ void Header::print() {
 
 unsigned char *Header::getArray() {
     return array;
+}
+
+bool Header::equals(Header header) {
+    for (int i = 0; i < 8; i++) {
+        if (array[i] != header.getArray()[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+Header::Header() {
+
 }
 
 
