@@ -84,6 +84,8 @@ public:
 
     static bool stringEquals(const char *s1, const char *s2);
 
+    void reset();
+
 private:
 
     int nextSubPackageNumber;

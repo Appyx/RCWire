@@ -9,7 +9,11 @@ The RaspberryPi should be the "Control Center" which sends the messages.
 
 I think this is the cheapest solution for creating a wireless network of ICs.
 
+
+
 ## How to use?
+The ArduinoExample.cpp showcases an garage door opener with only one command and the RaspberryExample.cpp is the sender which, in my case, is called with a shell script.
+(e.g. ```./send open the door```)
 ```
 //create an object
 RCWire wire = RCWire(0, 12); 
@@ -47,7 +51,7 @@ First you have to install the well known library WiringPI <a>http://wiringpi.com
 Then just clone the git repo and run the make command.  
 Now you should have a send application which takes the text to be sent as parameter.  
 (This application will only work with the ArduinoExample.cpp counterpart. 
-Note that you have to change the message after it was sent once if your sender doesn't run in an infinite loop.)
+Note that you have to change the message after it was sent once if your sender doesn't run in an infinite loop, or just use the reset function on the receiver after executing the desired command.)
 
 ## Features
 * You can send text with a maximum length of 59 characters in the default setup.  

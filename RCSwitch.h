@@ -192,6 +192,7 @@ private:
     static unsigned int timings[];
 
 
+    static void clearCodeArray();
 };
 
 #endif

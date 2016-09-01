@@ -29,20 +29,35 @@
 #include "Arduino.h"
 #include "RCWire.h"
 
+#define LED_PIN 13
+
 RCWire wire = RCWire(0, 12);
 
 void handleMessage(const char *message);
 
+bool messageReceived = false;
+
 void setup() {
     Serial.begin(9600);
-    wire.plugIn(0, handleMessage);  //same port as on Arduino
-
+    pinMode(7, OUTPUT); //pin to control the door
+    digitalWrite(7, LOW);
+    wire.plugIn(0, handleMessage);
 }
 
 void loop() {
-
+    if (messageReceived) { //busy wait for message (can't use delay in interrupt)
+        messageReceived = false;
+        digitalWrite(7, HIGH);
+        delay(1500); //open the door
+        digitalWrite(7, LOW);
+        wire.reset(); //reset the wire so that the same message can be sent again.
+    }
 }
 
 void handleMessage(const char *message) {
-    RCWire::println(message); //useful method for cross - platform printing
+    RCWire::print("message received: ");
+    RCWire::println(message);
+    if (RCWire::stringEquals(message, "open the door")) { //could use strcmp too.
+        messageReceived = true;
+    }
 }

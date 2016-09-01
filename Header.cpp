@@ -147,6 +147,14 @@ Header::Header() {
 
 }
 
+void Header::toggleSync() {
+    if (array[0] == 0) {
+        array[0] = 1;
+    } else {
+        array[0] = 0;
+    }
+}
+
 
 
 

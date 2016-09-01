@@ -804,6 +804,7 @@ void RECEIVE_ATTR RCSwitch::handleInterrupt() {
                     if (receiveProtocolInCodeArrayMode(i, changeCount)) {
                         RCWire::onRcMessage(nReceivedCode,
                                             nReceivedProtocol); //Entry point for RCWire
+                        clearCodeArray();
                         break;
                     }
                 }
@@ -822,4 +823,11 @@ void RECEIVE_ATTR RCSwitch::handleInterrupt() {
     RCSwitch::timings[changeCount++] = duration;
     lastTime = time;
 
+}
+
+void RCSwitch::clearCodeArray() {
+
+    for (int i = 0; i < RCWire::frameSize; i++) {
+        RCSwitch::nReceivedCode[i] = 0;
+    }
 }

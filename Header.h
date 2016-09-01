@@ -60,6 +60,8 @@ public:
 
     bool equals(Header header);
 
+    void toggleSync();
+
 private:
     unsigned char array[8];
 

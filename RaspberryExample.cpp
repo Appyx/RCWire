@@ -34,6 +34,18 @@
 
 void onMessage(const char *message);
 
+/**
+ *
+ * This program doesn't run in an endless loop so we have to reset the wire on the receiver. (ArduinoExample.cpp)
+ * With the reset we can send messages twice even tough the program doesn't change the snyc flag in the sender.
+ *
+ * If we wanted to send messages in a loop, this step wouldn't be required.
+ *
+ * @param argc number of arguments
+ * @param argv values of arguments
+ * @return 1 on fail, 0 on success
+ */
+
 int main(int argc, char **argv) {
 #ifdef RPI
     wiringPiSetup();
@@ -45,7 +57,9 @@ int main(int argc, char **argv) {
 
     for (int i = 1; i < argc; i++) {
         buf << argv[i];
-        buf << " ";
+        if (i < argc - 1) {
+            buf << " "; //remove last space
+        }
     }
     if (buf.str().size() > wire.getMaxMessageSize()) {
         std::cout << "error -" << " maximum size = " << wire.getMaxMessageSize()

@@ -120,6 +120,9 @@ void RCWire::onRcMessage(unsigned char *code, int protocol) {
 
     char message[(frameSize - 8) / 8];
     instance->decodeMessage(message, code);
+    if (message[0] == 0) {
+        return;
+    }
 
     if (stringEquals(instance->lastMessage, message) && instance->lastHeader.equals(header)) {
         return;
@@ -133,7 +136,6 @@ void RCWire::onRcMessage(unsigned char *code, int protocol) {
 
     if (header.getSubPackage() == header.getPackages()) {
         instance->singlePortHandler(instance->buffer);
-        instance->storeLastHeader(header);
     }
 }
 
@@ -219,6 +221,7 @@ void RCWire::println(const char *string) {
 void RCWire::printArray(char *array, int size) {
     for (int i = 0; i < size; i++) {
         print(array[i]);
+        print("|");
     }
 
 }
@@ -227,11 +230,21 @@ void RCWire::printArray(unsigned char *array, int size) {
     for (int i = 0; i < size; i++) {
         print(array[i]);
     }
-
 }
 
 void RCWire::storeLastHeader(Header header) {
     lastHeader = Header(header.getArray());
+}
+
+/**
+ * Reset the wire so that the same message can be sent again.
+ * This is only necessary if the sender can't change the sync flag (if sender program is not in an endless loop).
+ */
+void RCWire::reset() {
+    instance->lastHeader = Header(1);
+    for (int i = 0; i < 15; i++) {
+        instance->lastMessage[i] = 0;
+    }
 }
 
 
