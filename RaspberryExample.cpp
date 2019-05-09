@@ -37,7 +37,7 @@ void onMessage(const char *message);
 /**
  *
  * This program doesn't run in an endless loop so we have to reset the wire on the receiver. (ArduinoExample.cpp)
- * With the reset we can send messages twice even tough the program doesn't change the snyc flag in the sender.
+ * With the reset we can send messages twice even tough the program doesn't change the sync flag in the sender.
  *
  * If we wanted to send messages in a loop, this step wouldn't be required.
  *
