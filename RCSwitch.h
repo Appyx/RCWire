@@ -1,5 +1,5 @@
 /*
-  RCSwitch - Arduino libary for remote control outlet switches
+  RCSwitch - Arduino library for remote control outlet switches
   Copyright (c) 2011 Suat Özgür.  All right reserved.
 
   Contributors:
@@ -51,7 +51,7 @@
 
 
 // At least for the ATTiny X4/X5, receiving has to be disabled due to
-// missing libm depencies (udivmodhi4)
+// missing libm dependencies (udivmodhi4)
 
 
 // Number of maximum High/Low changes per packet.
